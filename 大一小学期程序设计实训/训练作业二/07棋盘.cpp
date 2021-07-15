@@ -1,6 +1,7 @@
 #include<bits/stdc++.h>
 using namespace std;
-int Do(int x,int y,int a[][],int nowmax,int n)
+bool a[2001][2001];
+int Do(int x,int y,int nowmax,int n)
 {
 	if (x + nowmax - 1> n || y + nowmax - 1> n) return 0;
 	bool flag = 0;
@@ -23,14 +24,40 @@ int Do(int x,int y,int a[][],int nowmax,int n)
 	{
 		if (i % 2 == 0)
 		{
-			for (int j = 0; j < nowmax; j++)
+			bool flag2 = 0;
+			for (int j = 0; j < i; j++)
 			{
-				if (a[x + i - 1][y + j] != j % 2) break;
+				
+				if (a[x + i - 1][y + j] != j % 2)
+				{
+					flag2 = 1; 
+					break;
+				}
+				if (a[x + j][y + i - 1] != j % 2)
+				{
+					flag2 = 1; 
+					break;
+				}
 			}
+			if (flag2) break;
 		}
 		else
 		{
-			
+			bool flag2 = 0;
+			for (int j = 0; j < i; j++)
+			{
+				if ((a[x + i - 1][y + j] + 1) % 2 != j % 2)
+				{
+					flag2 = 1; 
+					break;
+				}
+				if ((a[x + j][y + i - 1] + 1) % 2 != j % 2)
+				{
+					flag2 = 1; 
+					break;
+				}
+			}
+			if (flag2) break;
 		}
 	}
 	return i - 1;
@@ -39,7 +66,6 @@ int main()
 {
 	int n;
 	cin >> n;
-	bool a[n + 1][n + 1];
 	for (int i = 1; i <= n; i++)
 	{
 		string now;
@@ -57,11 +83,12 @@ int main()
 		{
 			if (a[i][j])
 			{
-				int now = Do(i,j,a,nowmax,n);
+				int now = Do(i,j,nowmax,n);
 				if (now == nowmax) nownum++;
 				if (now > nowmax) nowmax = now,nownum = 1;
 			}
 		}
 	}
+	cout << nowmax << " " << nownum; 
 	return 0;
 }
